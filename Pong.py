@@ -8,43 +8,8 @@ from threading import Thread
 from time import sleep
 
 
-"""Définition des fonctions nécessaires au programme"""
-def wCentre(objet):
-    """Renvoie les coordonnées du centre du widget"""
-    objet.update()
-    return(objet.winfo_width()/2, objet.winfo_height()/2)
-
-def press(event):
-    key_press[event.keysym]=True
-    move_launch(event)
-         
-def release(event):
-    key_press[event.keysym]=False
-
-def move(event):
-    while key_press != {"z":False, "s":False, "Up":False, "Down":False}:
-        if key_press["Up"]:
-            plateauJeu.move(raquette2, 0, -10)
-        if key_press["z"]:
-            plateauJeu.move(raquette1, 0, -10)
-        if key_press["Down"]:
-            plateauJeu.move(raquette2, 0, 10)
-        if key_press["s"]:
-            plateauJeu.move(raquette1, 0, 10)
-        sleep(0.03)
-    global does_move
-    does_move = False
-
-def move_launch(evt):
-    global does_move
-    if not does_move:
-        does_move = True
-        a = MonThread(evt)
-        a.start()
-    
-
 """Création des classes nécessaires au programme"""
-class MonThread(Thread):
+class ThreadMove(Thread):
     def __init__(self, evt):
         Thread.__init__(self)
         self.evt = evt
