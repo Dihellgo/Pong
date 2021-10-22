@@ -9,13 +9,7 @@ from time import sleep
 
 
 """Création des classes nécessaires au programme"""
-class ThreadMove(Thread):
-    def __init__(self, evt):
-        Thread.__init__(self)
-        self.evt = evt
 
-    def run(self):
-        move(self.evt)
         
 
 
