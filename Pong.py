@@ -31,8 +31,10 @@ def move(event):
             plateauJeu.move(raquette2, 0, 10)
         if key_press["s"]:
             plateauJeu.move(raquette1, 0, 10)
-        if key_press["q"] and key_press["d"]:
+        if key_press["d"]:
             balle.versLaDroite()
+        if key_press["q"]:
+            balle.versLaGauche()
         sleep(0.03)
     global does_move
     does_move = False
@@ -103,6 +105,9 @@ class BalleJeu():
     
     def versLaDroite(self):
         self.__dirx = abs(self.__dirx)
+    
+    def versLaGauche(self):
+        self.__dirx = -abs(self.__dirx)
 
         
         
