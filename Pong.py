@@ -105,9 +105,11 @@ class BalleJeu():
     
     def versLaDroite(self):
         self.__dirx = abs(self.__dirx)
+        self.__vitesse=self.__vitesse/2 + 1
     
     def versLaGauche(self):
         self.__dirx = -abs(self.__dirx)
+        self.__vitesse=self.__vitesse/2 + 1
 
         
         
