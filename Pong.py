@@ -22,7 +22,7 @@ def release(event):
     key_press[event.keysym]=False
 
 def move(event):
-    while key_press != {"z":False, "s":False, "Up":False, "Down":False}:
+    while key_press != {"z":False, "s":False, "Up":False, "Down":False, "q":False, "d":False}:
         if key_press["Up"]:
             plateauJeu.move(raquette2, 0, -10)
         if key_press["z"]:
@@ -31,6 +31,8 @@ def move(event):
             plateauJeu.move(raquette2, 0, 10)
         if key_press["s"]:
             plateauJeu.move(raquette1, 0, 10)
+        if key_press["q"] and key_press["d"]:
+            balle.versLaDroite()
         sleep(0.03)
     global does_move
     does_move = False
@@ -98,6 +100,10 @@ class BalleJeu():
 
         else:
             self.__contact_raquette -=1
+    
+    def versLaDroite(self):
+        self.__dirx = abs(self.__dirx)
+
         
         
 """Définition des constantes et des scores"""
@@ -150,9 +156,9 @@ plateauJeu.grid_forget()
 does_move = False
 
 #Déplacement des raquettes
-key_press={"z":False, "s":False, "Up":False, "Down":False}
+key_press={"z":False, "s":False, "Up":False, "Down":False, "q":False, "d":False}
 
-for key in ["Up", "z", "s", "Down"]:
+for key in ["Up", "z", "s", "Down", "q", "d"]:
     FEN.bind_all('<KeyPress-%s>' %key, press)   
     FEN.bind_all('<KeyRelease-%s>' %key, release)
 
