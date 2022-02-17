@@ -1,6 +1,7 @@
 """JEU DE PONG"""
 
 """Import des modules et fonctions nécéssaires"""
+from msilib import text
 import tkinter as Tk
 import random
 from math import sqrt
@@ -61,7 +62,8 @@ class BalleJeu():
         self.__dirx, self.__diry = self.defDirDepart()
         self.__contact_raquette = False
         self.__vitesse = 1
-        self.balle = canv.create_oval(self.__x - canv.winfo_height()/30, self.__y + canv.winfo_height()/30, self.__x + canv.winfo_height()/30, self.__y - canv.winfo_height()/30, fill = "#0f0")
+        self.__canv = canv
+        self.balle = canv.create_oval(self.__x - self.__canv.winfo_height()/30, self.__y + self.__canv.winfo_height()/30, self.__x + self.__canv.winfo_height()/30, self.__y - self.__canv.winfo_height()/30, fill = "#0f0")
 
     def defDirDepart(self):
         """Définie la direction de départ de la balle"""
@@ -73,17 +75,18 @@ class BalleJeu():
     def move(self):
         """Déplace la balle"""
         #Sauvegarde les coordonnées de la balle avant déplacement
-        self.__pastx = self.__x
-        self.__pasty = self.__y
+        __pastx = self.__x
+        __pasty = self.__y
         #Définie les nouvelles coordonnées de la balle
         plateauJeu.update()
         self.__x += plateauJeu.winfo_width()/130 * self.__dirx * self.__vitesse
         self.__y -= plateauJeu.winfo_width()/130 * self.__diry * self.__vitesse
         #Déplace la balle
-        plateauJeu.move(self.balle, self.__x-self.__pastx,self.__y - self.__pasty)
+        plateauJeu.move(self.balle, self.__x-__pastx,self.__y - __pasty)
         FEN.after(25, self.move)
         self.__vitesse *= 1.001
         self.chDir()
+        self.checkPoint()
 
     def chDir(self):
         if self.__y < plateauJeu.winfo_height()/130:
@@ -98,7 +101,28 @@ class BalleJeu():
 
         else:
             self.__contact_raquette -=1
+    
+    def checkPoint(self):
+        if self.__x >= plateauJeu.winfo_width():
+            global scoreJ1
+            scoreJ1 += 1
+            score_gauche.config(text = str(0)*(3-len(str(scoreJ1)))+str(scoreJ1))
+            self.reset()
         
+        elif self.__x <= 0:
+            global scoreJ2
+            scoreJ2 += 1
+            score_droite.config(text = str(0)*(3-len(str(scoreJ2)))+str(scoreJ2))
+            self.reset()
+    
+    def reset(self):
+        __pastx = self.__x
+        __pasty = self.__y
+        self.__x, self.__y = wCentre(self.__canv)
+        plateauJeu.move(self.balle, self.__x - __pastx, self.__y - __pasty)
+        self.__dirx, self.__diry = self.defDirDepart()
+        self.__vitesse = 1
+
         
 """Définition des constantes et des scores"""
 FEN = Tk.Tk()
@@ -114,12 +138,10 @@ FEN.title('JEU DE PONG')
 #Initialisation des scores des joueurs et de la variable pour les afficher
 scoreJ1 = 0
 scoreJ2 = 0
-scoreJ1Var = Tk.StringVar(value=str(0)*(3-len(str(scoreJ1)))+str(scoreJ1))
-scoreJ2Var = Tk.StringVar(value=str(0)*(3-len(str(scoreJ2)))+str(scoreJ2))
 
 #Initialisation de la ligne d'affichage
-score_gauche = Tk.Label(FEN, bg = '#000', font = ('Liberation Sans Sérif', 20), text = scoreJ1Var.get(), fg = '#ff0')
-score_droite = Tk.Label(FEN, bg = '#000', font = ('Liberation Sans Sérif', 20), text = scoreJ2Var.get(), fg = '#ff0')
+score_gauche = Tk.Label(FEN, bg = '#000', font = ('Liberation Sans Sérif', 20), text = str(0)*(3-len(str(scoreJ1)))+str(scoreJ1), fg = '#ff0')
+score_droite = Tk.Label(FEN, bg = '#000', font = ('Liberation Sans Sérif', 20), text = str(0)*(3-len(str(scoreJ2)))+str(scoreJ2), fg = '#ff0')
 titre = Tk.Canvas(FEN, height=window_height/20, width=int(window_width-score_gauche.winfo_reqwidth()-score_droite.winfo_reqwidth()))
 #Affichage des variables pour initialiser correctement les valeurs
 score_gauche.grid(column=0, row=0)
