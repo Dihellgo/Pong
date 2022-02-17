@@ -3,7 +3,7 @@
 """Import des modules et fonctions nécéssaires"""
 import tkinter as Tk
 import random
-from math import sin, cos, pi, sqrt
+from math import sqrt
 from threading import Thread
 from time import sleep
 
@@ -23,13 +23,13 @@ def release(event):
 
 def move(event):
     while key_press != {"z":False, "s":False, "Up":False, "Down":False}:
-        if key_press["Up"]:
+        if key_press["Up"] and plateauJeu.coords(raquette2)[1] > 0:
             plateauJeu.move(raquette2, 0, -10)
-        if key_press["z"]:
+        if key_press["z"] and plateauJeu.coords(raquette1)[1] > 0:
             plateauJeu.move(raquette1, 0, -10)
-        if key_press["Down"]:
+        if key_press["Down"] and plateauJeu.coords(raquette2)[1] < 4*plateauJeu.winfo_height()/5:
             plateauJeu.move(raquette2, 0, 10)
-        if key_press["s"]:
+        if key_press["s"] and plateauJeu.coords(raquette1)[1] < 4*plateauJeu.winfo_height()/5:
             plateauJeu.move(raquette1, 0, 10)
         sleep(0.03)
     global does_move
