@@ -22,7 +22,7 @@ def release(event):
     key_press[event.keysym]=False
 
 def move(event):
-    while key_press != {"z":False, "s":False, "Up":False, "Down":False}:
+    while key_press != {"z":False, "s":False, "Up":False, "Down":False, "q":False, "d":False}:
         if key_press["Up"] and plateauJeu.coords(raquette2)[1] > 0:
             plateauJeu.move(raquette2, 0, -10)
         if key_press["z"] and plateauJeu.coords(raquette1)[1] > 0:
@@ -31,6 +31,10 @@ def move(event):
             plateauJeu.move(raquette2, 0, 10)
         if key_press["s"] and plateauJeu.coords(raquette1)[1] < 4*plateauJeu.winfo_height()/5:
             plateauJeu.move(raquette1, 0, 10)
+        if key_press["d"]:
+            balle.versLaDroite()
+        if key_press["q"]:
+            balle.versLaGauche()
         sleep(0.03)
     global does_move
     does_move = False
@@ -121,6 +125,14 @@ class BalleJeu():
         plateauJeu.move(self.balle, self.__x - __pastx, self.__y - __pasty)
         self.__dirx, self.__diry = self.defDirDepart()
         self.__vitesse = 1
+    
+    def versLaDroite(self):
+        self.__dirx = abs(self.__dirx)
+        self.__vitesse=self.__vitesse/2 + 1
+    
+    def versLaGauche(self):
+        self.__dirx = -abs(self.__dirx)
+        self.__vitesse=self.__vitesse/2 + 1
 
         
 """Définition des constantes et des scores"""
@@ -171,9 +183,9 @@ plateauJeu.grid_forget()
 does_move = False
 
 #Déplacement des raquettes
-key_press={"z":False, "s":False, "Up":False, "Down":False}
+key_press={"z":False, "s":False, "Up":False, "Down":False, "q":False, "d":False}
 
-for key in ["Up", "z", "s", "Down"]:
+for key in ["Up", "z", "s", "Down","q","d"]:
     FEN.bind_all('<KeyPress-%s>' %key, press)   
     FEN.bind_all('<KeyRelease-%s>' %key, release)
 
