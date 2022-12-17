@@ -1,7 +1,6 @@
 """JEU DE PONG"""
 
 """Import des modules et fonctions nécéssaires"""
-from msilib import text
 import tkinter as Tk
 import random
 from math import sqrt
